@@ -4,12 +4,12 @@ int DriverFL = A0;
 int DriverFR = A1;
 int DriverRL = A2;
 int DriverRR = A3;
-int FrontRightUp = 22;
-int FrontRightDown = 23;
+int FrontRightUp = 20;
+int FrontRightDown = 22;
 int RearLeftUp = 24;
-int RearLeftDown = 25;
-int RearRightUp = 26;
-int RearRightDown = 27;
+int RearLeftDown = 26;
+int RearRightUp = 28;
+int RearRightDown = 30;
 
 void setup() {
   // put your setup code here, to run once:
@@ -22,14 +22,14 @@ void setup() {
   pinMode(RearRightUp, INPUT);
   pinMode(RearRightDown, INPUT);
   // Outputs to motor drivers:
-  pinMode(30, OUTPUT);
-  pinMode(31, OUTPUT);
-  pinMode(32, OUTPUT);
-  pinMode(33, OUTPUT);
-  pinMode(34, OUTPUT);
-  pinMode(35, OUTPUT);
-  pinMode(36, OUTPUT);
-  pinMode(37, OUTPUT);
+  pinMode(2, OUTPUT);
+  pinMode(3, OUTPUT);
+  pinMode(4, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(6, OUTPUT);
+  pinMode(7, OUTPUT);
+  pinMode(8, OUTPUT);
+  pinMode(9, OUTPUT);
 }
 
 void loop() {
@@ -46,7 +46,7 @@ int RearRightUp_val = digitalRead(RearRightUp);
 int RearRightDown_val = digitalRead(RearRightDown);
 
  //Controlling wether to debug signals
-int DriverDoorReadout = 1;
+int DriverDoorReadout = 0;
 int FrontRightReadout = 0;
 int RearLeftReadout = 0;
 int RearRightReadout = 0;
@@ -60,7 +60,7 @@ if(DriverDoorReadout == 1){
   Serial.println(DriverRL_val);
   Serial.print("DriverRR: ");
   Serial.println(DriverRR_val);
-  delay(250);
+  delay(2500);
 }
 
 if(FrontRightReadout == 1){
@@ -68,7 +68,7 @@ if(FrontRightReadout == 1){
   Serial.print(FrontRightUp_val);
   Serial.print(", FrontRightDown: ");
   Serial.println(FrontRightDown_val);
-  delay(150);
+  delay(2500);
 }
 
 if(RearLeftReadout == 1){
@@ -76,7 +76,7 @@ if(RearLeftReadout == 1){
   Serial.print(RearLeftUp_val);
   Serial.print(", RearLeftDown: ");
   Serial.println(RearLeftDown_val);
-  delay(150);
+  delay(2500);
 }
 
 if(RearRightReadout == 1){
@@ -84,7 +84,7 @@ if(RearRightReadout == 1){
   Serial.print(RearRightUp_val);
   Serial.print(", RearRightDown: ");
   Serial.println(RearRightDown_val);
-  delay(150);
+  delay(2500);
 }
 
 
@@ -107,22 +107,32 @@ Serial.println("Unblocking rear window controls");
 a7block = 0;
 delay(750);
 }
+*/
 
-if(A12_val < 1000){
-  delay(50);
-  A12_val = analogRead(A12); // Driver door window
-  while(A12_val < 100){
+if(DriverFL_val < 1000){
+  delay(100);
+  DriverFL_val = analogRead(DriverFL); // Driver door window
+  while(DriverFL_val < 300){
     Serial.println("1L Lowering front left window");
-    delay(500);
-    A12_val = analogRead(A12); // Driver door window
+    digitalWrite(4, HIGH);
+    digitalWrite(5, LOW);
+    delay(150);
+    DriverFL_val = analogRead(DriverFL); // Driver door window
   }
-  while(A12_val > 100 && A12_val < 600){
+  while(DriverFL_val > 300 && DriverFL_val < 950){
     Serial.println("1R Raising front left window");
-    delay(500);
-    A12_val = analogRead(A12); // Driver door window
+    digitalWrite(4, LOW);
+    digitalWrite(5, HIGH);
+    delay(150);
+    DriverFL_val = analogRead(DriverFL); // Driver door window
   }
 }
+if(DriverFL_val > 1000){
+    digitalWrite(4, LOW);
+    digitalWrite(5, LOW);
+}
 
+/*
 if(A13_val < 1000){
   delay(50);
   A13_val = analogRead(A13); // front right door window
@@ -140,7 +150,7 @@ if(A13_val < 1000){
 
 if(A14_val < 1000){
   delay(50);
-  A14_val = analogRead(A14); // Rear right door window
+  A14_val = analogRead(A14); // Rear left door window
   while(A14_val < 100){
     Serial.println("3L Lowering rear left window");
     delay(500);
@@ -152,27 +162,30 @@ if(A14_val < 1000){
     A14_val = analogRead(A14); // Rear right door window
   }
 }
+*/
 
-if(A15_val < 1000){
+if(DriverRR_val < 1000){
   delay(50);
-  A15_val = analogRead(A15); // Rear right door window
-  while(A15_val < 100){
+  DriverRR_val = analogRead(DriverRR); // Rear right door window
+  while(DriverRR_val < 125){
     Serial.println("4L Lowering rear right window");
-    digitalWrite(2, HIGH);
-    digitalWrite(3, LOW);
-    delay(100);
-    A15_val = analogRead(A15); // Rear right door window
+    digitalWrite(8, HIGH);
+    digitalWrite(9, LOW);
+    delay(50);
+    DriverRR_val = analogRead(DriverRR); // Rear right door window
   }
-  while(A15_val > 100 && A15_val < 600){
+  while(DriverRR_val > 800 && DriverRR_val < 950){
     Serial.println("4R Raising rear right window");
-    digitalWrite(2, LOW);
-    digitalWrite(3, HIGH);
-    delay(100);
-    A15_val = analogRead(A15); // Rear right door window
+    digitalWrite(8, LOW);
+    digitalWrite(9, HIGH);
+    delay(50);
+    DriverRR_val = analogRead(DriverRR); // Rear right door window
   }
 }
-digitalWrite(2, LOW);
-digitalWrite(3, LOW);
-*/
+
+if(DriverRR_val > 1000){
+    digitalWrite(8, LOW);
+    digitalWrite(9, LOW);
+}
 
 }
